@@ -10,9 +10,17 @@ export async function TradingHeader() {
     // Get Bitcoin data as the default trading pair
     const bitcoinData = await coinGeckoApi.getCoinDetails('bitcoin')
     const coin = bitcoinData
-    
-    const changeColor = getPriceChangeColor(coin.market_data.price_change_percentage_24h.usd)
-    const ChangeIcon = coin.market_data.price_change_percentage_24h.usd > 0 ? TrendingUp : TrendingDown
+
+    // Safely access nested properties with fallbacks
+    const priceChangePercent = coin.market_data?.price_change_percentage_24h?.usd || 0
+    const priceChange24h = coin.market_data?.price_change_24h?.usd || 0
+    const currentPrice = coin.market_data?.current_price?.usd || 0
+    const high24h = coin.market_data?.high_24h?.usd || 0
+    const low24h = coin.market_data?.low_24h?.usd || 0
+    const volume24h = coin.market_data?.total_volume?.usd || 0
+
+    const changeColor = getPriceChangeColor(priceChangePercent)
+    const ChangeIcon = priceChangePercent > 0 ? TrendingUp : TrendingDown
 
     return (
       <Card className="bg-trading-surface border-border/50">
@@ -46,13 +54,13 @@ export async function TradingHeader() {
               <div className="flex items-center gap-6">
                 <div>
                   <div className="text-2xl font-bold">
-                    {formatPrice(coin.market_data.current_price.usd)}
+                    {formatPrice(currentPrice)}
                   </div>
                   <div className={`flex items-center gap-1 text-sm ${changeColor}`}>
                     <ChangeIcon className="h-4 w-4" />
-                    {formatPercentage(coin.market_data.price_change_percentage_24h.usd)}
+                    {formatPercentage(priceChangePercent)}
                     <span className="text-muted-foreground">
-                      ({formatPrice(coin.market_data.price_change_24h.usd, 'USD')})
+                      ({priceChange24h >= 0 ? '+' : ''}{formatPrice(Math.abs(priceChange24h))})
                     </span>
                   </div>
                 </div>
@@ -61,19 +69,19 @@ export async function TradingHeader() {
                   <div>
                     <div className="text-muted-foreground">24h High</div>
                     <div className="font-medium">
-                      {formatPrice(coin.market_data.high_24h.usd)}
+                      {formatPrice(high24h)}
                     </div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">24h Low</div>
                     <div className="font-medium">
-                      {formatPrice(coin.market_data.low_24h.usd)}
+                      {formatPrice(low24h)}
                     </div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">24h Volume</div>
                     <div className="font-medium">
-                      {formatVolume(coin.market_data.total_volume.usd)}
+                      {formatVolume(volume24h)}
                     </div>
                   </div>
                 </div>

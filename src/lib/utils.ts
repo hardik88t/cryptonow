@@ -7,36 +7,55 @@ export function cn(...inputs: ClassValue[]) {
 
 // Price formatting utilities for crypto trading
 export function formatPrice(price: number, currency = 'USD'): string {
-  if (price < 0.000001) return price.toFixed(8);
-  if (price < 0.01) return price.toFixed(6);
-  if (price < 1) return price.toFixed(4);
-  if (price < 100) return price.toFixed(2);
-  
-  return price.toLocaleString('en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  // Handle undefined, null, or NaN values
+  if (price == null || isNaN(price)) return '$0.00';
+
+  // Handle negative values
+  const absPrice = Math.abs(price);
+
+  if (absPrice < 0.000001) return absPrice.toFixed(8);
+  if (absPrice < 0.01) return absPrice.toFixed(6);
+  if (absPrice < 1) return absPrice.toFixed(4);
+  if (absPrice < 100) return absPrice.toFixed(2);
+
+  try {
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  } catch (error) {
+    // Fallback if toLocaleString fails
+    return `$${price.toFixed(2)}`;
+  }
 }
 
 export function formatPercentage(change: number): string {
+  // Handle undefined, null, or NaN values
+  if (change == null || isNaN(change)) return '0.00%';
+
   const formatted = Math.abs(change).toFixed(2);
   const sign = change >= 0 ? '+' : '-';
   return `${sign}${formatted}%`;
 }
 
 export function formatMarketCap(marketCap: number): string {
-  if (marketCap >= 1e12) {
+  // Handle undefined, null, or NaN values
+  if (marketCap == null || isNaN(marketCap)) return '$0.00';
+
+  const absValue = Math.abs(marketCap);
+
+  if (absValue >= 1e12) {
     return `$${(marketCap / 1e12).toFixed(2)}T`;
   }
-  if (marketCap >= 1e9) {
+  if (absValue >= 1e9) {
     return `$${(marketCap / 1e9).toFixed(2)}B`;
   }
-  if (marketCap >= 1e6) {
+  if (absValue >= 1e6) {
     return `$${(marketCap / 1e6).toFixed(2)}M`;
   }
-  if (marketCap >= 1e3) {
+  if (absValue >= 1e3) {
     return `$${(marketCap / 1e3).toFixed(2)}K`;
   }
   return `$${marketCap.toFixed(2)}`;
@@ -47,6 +66,9 @@ export function formatVolume(volume: number): string {
 }
 
 export function getPriceChangeColor(change: number): string {
+  // Handle undefined, null, or NaN values
+  if (change == null || isNaN(change)) return 'text-neutral';
+
   if (change > 0) return 'text-profit';
   if (change < 0) return 'text-loss';
   return 'text-neutral';
