@@ -32,10 +32,19 @@ export interface CryptoCurrency {
   last_updated: string;
 }
 
-export interface CoinDetails extends CryptoCurrency {
+export interface CoinDetails {
+  id: string;
+  symbol: string;
+  name: string;
   description: {
     en: string;
   };
+  image: {
+    thumb: string;
+    small: string;
+    large: string;
+  };
+  market_cap_rank: number;
   links: {
     homepage: string[];
     blockchain_site: string[];
@@ -56,6 +65,10 @@ export interface CoinDetails extends CryptoCurrency {
     current_price: { [key: string]: number };
     market_cap: { [key: string]: number };
     total_volume: { [key: string]: number };
+    price_change_percentage_24h: { [key: string]: number };
+    price_change_24h: { [key: string]: number };
+    high_24h: { [key: string]: number };
+    low_24h: { [key: string]: number };
   };
 }
 

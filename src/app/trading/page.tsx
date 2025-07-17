@@ -1,19 +1,38 @@
+import { Suspense } from "react"
+import { TradingHeader } from "@/components/trading/trading-header"
+import { TradingChart } from "@/components/trading/trading-chart"
+import { OrderBook } from "@/components/trading/order-book"
+import { TradeHistory } from "@/components/trading/trade-history"
+import { TradingForm } from "@/components/trading/trading-form"
+
 export default function TradingPage() {
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Trading</h1>
-        <div className="text-sm text-muted-foreground">
-          Advanced trading interface
-        </div>
-      </div>
-      
-      <div className="border rounded-lg p-8 flex items-center justify-center min-h-[500px]">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold">Trading Interface Coming Soon</h2>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            The professional trading interface with TradingView-style charts, order book, and trading tools is under development.
-          </p>
+    <div className="min-h-screen bg-trading-background">
+      <div className="container mx-auto p-4 space-y-4">
+        <Suspense fallback={<div>Loading trading data...</div>}>
+          <TradingHeader />
+        </Suspense>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-200px)]">
+          {/* Main Chart Area */}
+          <div className="lg:col-span-3 space-y-4">
+            <Suspense fallback={<div>Loading chart...</div>}>
+              <TradingChart />
+            </Suspense>
+
+            <Suspense fallback={<div>Loading trade history...</div>}>
+              <TradeHistory />
+            </Suspense>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="space-y-4">
+            <Suspense fallback={<div>Loading order book...</div>}>
+              <OrderBook />
+            </Suspense>
+
+            <TradingForm />
+          </div>
         </div>
       </div>
     </div>
