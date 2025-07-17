@@ -200,59 +200,197 @@ JWT_SECRET=your_jwt_secret_here
 - **Solve difficult problems** - Share solutions
 - **Learn something new** - Document insights
 
-## 🎯 Project-Specific Customization
+## 🎯 CryptoNow Project-Specific Practices
 
-**Add your project-specific practices below:**
+### Next.js 15 + TypeScript Best Practices
+```typescript
+// Use TypeScript for all components and utilities
+interface CryptoCurrency {
+  id: string;
+  symbol: string;
+  name: string;
+  current_price: number;
+  price_change_percentage_24h: number;
+  market_cap: number;
+  volume_24h: number;
+}
 
-### [Your Tech Stack] Specific Practices
+// Follow Next.js App Router conventions
+// app/
+//   ├── (dashboard)/
+//   │   ├── page.tsx
+//   │   └── layout.tsx
+//   ├── trading/
+//   │   └── page.tsx
+//   ├── markets/
+//   │   └── page.tsx
+//   └── api/
+//       └── crypto/
+//           └── route.ts
+
+// Use shadcn/ui components consistently
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 ```
-Example for Next.js projects:
-- Use TypeScript for type safety
-- Follow Next.js file-based routing conventions
-- Use shadcn/ui for consistent UI components
-- Implement proper SEO with metadata
-- Use Prisma for database operations
-- Deploy to Vercel for optimal performance
+
+### CoinGecko API Integration Guidelines
+```typescript
+// Rate Limiting Best Practices (10,000 calls/month = 333/day)
+const CACHE_DURATION = {
+  POPULAR_COINS: 60, // 1 minute for top coins
+  MARKET_DATA: 120,  // 2 minutes for market overview
+  DETAILED_DATA: 300, // 5 minutes for individual coin data
+  NEWS_DATA: 900     // 15 minutes for news
+}
+
+// Batch requests when possible
+const fetchMultipleCoins = async (coinIds: string[]) => {
+  const batchSize = 250; // CoinGecko limit
+  const batches = chunk(coinIds, batchSize);
+  // Process batches with proper error handling
+}
+
+// Always handle rate limits gracefully
+const apiCall = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    if (response.status === 429) {
+      // Use cached data or show loading state
+      return getCachedData(url);
+    }
+    return response.json();
+  } catch (error) {
+    // Fallback to cached data
+    return getCachedData(url);
+  }
+}
 ```
 
 ### Development Environment Setup
-```
-Add your specific setup instructions:
-- Required Node.js version
-- Database setup steps
-- Environment variables needed
-- Development server commands
-- Testing commands
+```bash
+# Required Node.js version
+node --version  # Should be 18.17.0 or higher
+
+# Environment variables needed
+COINGECKO_API_KEY=your_api_key_here
+DATABASE_URL=postgresql://user:password@localhost:5432/cryptonow
+NEXTAUTH_SECRET=your_nextauth_secret_here
+NEXTAUTH_URL=http://localhost:3000
+
+# Development server commands
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+npm run type-check   # TypeScript type checking
+
+# Database commands (if using Prisma)
+npx prisma generate  # Generate Prisma client
+npx prisma db push   # Push schema to database
+npx prisma studio    # Open Prisma Studio
 ```
 
-### Code Style Guidelines
+### Trading Platform UI/UX Guidelines
+```typescript
+// Color scheme for trading interface
+const TRADING_COLORS = {
+  profit: '#00ff88',    // Green for gains
+  loss: '#ff4757',      // Red for losses
+  neutral: '#747d8c',   // Gray for neutral
+  background: '#1a1a1a', // Dark background
+  surface: '#2d3436',   // Card backgrounds
+  accent: '#00cec9'     // Accent color
+}
+
+// Price formatting standards
+const formatPrice = (price: number, currency = 'USD') => {
+  if (price < 0.01) return price.toFixed(6);
+  if (price < 1) return price.toFixed(4);
+  if (price < 100) return price.toFixed(2);
+  return price.toLocaleString('en-US', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2
+  });
+}
+
+// Percentage change display
+const formatPercentage = (change: number) => {
+  const formatted = Math.abs(change).toFixed(2);
+  const sign = change >= 0 ? '+' : '-';
+  return `${sign}${formatted}%`;
+}
 ```
-Add your project's code style rules:
-- Naming conventions
-- File organization
-- Import/export patterns
-- Component structure (for frontend)
-- API design patterns (for backend)
+
+### Security Best Practices for Crypto Platform
+```typescript
+// Never store private keys or sensitive data
+// Use environment variables for all API keys
+// Implement proper input validation
+const validateCoinId = (id: string): boolean => {
+  return /^[a-z0-9-]+$/.test(id) && id.length <= 50;
+}
+
+// Rate limiting for API endpoints
+import { Ratelimit } from "@upstash/ratelimit";
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(100, "1 h"),
+});
+
+// Sanitize user inputs
+import DOMPurify from 'dompurify';
+const sanitizeInput = (input: string) => {
+  return DOMPurify.sanitize(input);
+}
 ```
 
 ### Testing Strategy
-```
-Document your testing approach:
-- Unit testing framework
-- Integration testing setup
-- E2E testing tools
-- Coverage requirements
-- Testing commands
+```bash
+# Unit testing with Jest and React Testing Library
+npm run test                    # Run all tests
+npm run test:watch             # Watch mode
+npm run test:coverage          # Coverage report
+
+# E2E testing with Playwright
+npm run test:e2e              # Run E2E tests
+npm run test:e2e:ui           # Run with UI
+
+# Component testing
+npm run test:components       # Test UI components
+
+# API testing
+npm run test:api             # Test API endpoints
+
+# Performance testing
+npm run lighthouse           # Lighthouse audit
+npm run test:performance     # Performance tests
 ```
 
 ### Deployment Process
-```
-Document your deployment workflow:
-- Build process
-- Environment setup
-- Deployment commands
-- Rollback procedures
-- Monitoring setup
+```bash
+# Build process
+npm run build                # Next.js build
+npm run export              # Static export (if needed)
+
+# Environment setup for production
+COINGECKO_API_KEY=prod_key
+DATABASE_URL=production_db_url
+NEXTAUTH_SECRET=production_secret
+NEXTAUTH_URL=https://cryptonow.com
+
+# Vercel deployment (recommended)
+vercel --prod
+
+# Docker deployment
+docker build -t cryptonow .
+docker run -p 3000:3000 cryptonow
+
+# Monitoring setup
+# - Vercel Analytics for performance
+# - Sentry for error tracking
+# - Uptime monitoring for API endpoints
+# - CoinGecko API usage monitoring
 ```
 
 ---
