@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,6 +12,16 @@ export const metadata: Metadata = {
   title: "CryptoNow - Professional Cryptocurrency Trading Platform",
   description: "A modern cryptocurrency trading platform with real-time price feeds, advanced trading charts, portfolio tracking, and market analysis.",
   keywords: ["cryptocurrency", "trading", "crypto", "bitcoin", "ethereum", "portfolio", "market analysis"],
+  icons: {
+    icon: [
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +44,7 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <div className="flex-1">{children}</div>
+            <SiteFooter />
           </div>
         </ThemeProvider>
       </body>
