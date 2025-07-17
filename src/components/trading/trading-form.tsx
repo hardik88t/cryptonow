@@ -42,7 +42,7 @@ export function TradingForm() {
   }
 
   return (
-    <Card className="bg-trading-surface border-border/50">
+    <Card className="bg-card border-border/50">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <ShoppingCart className="h-4 w-4" />

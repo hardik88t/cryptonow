@@ -62,7 +62,7 @@ export function OrderBook() {
   )
 
   return (
-    <Card className="bg-trading-surface border-border/50 h-[600px]">
+    <Card className="bg-card border-border/50 h-[500px]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <BookOpen className="h-4 w-4" />
@@ -70,7 +70,7 @@ export function OrderBook() {
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="p-0 h-[550px] overflow-hidden">
+      <CardContent className="p-0 h-[450px] overflow-hidden">
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="grid grid-cols-3 gap-2 px-4 py-2 text-xs text-muted-foreground border-b border-border/50">

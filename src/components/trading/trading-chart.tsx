@@ -62,7 +62,7 @@ export function TradingChart() {
   const isPositive = priceChange >= 0
 
   return (
-    <Card className="bg-trading-surface border-border/50 h-[500px]">
+    <Card className="bg-card border-border/50 h-[500px]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">

@@ -23,7 +23,7 @@ export async function TradingHeader() {
     const ChangeIcon = priceChangePercent > 0 ? TrendingUp : TrendingDown
 
     return (
-      <Card className="bg-trading-surface border-border/50">
+      <Card className="bg-card border-border/50">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -107,7 +107,7 @@ export async function TradingHeader() {
   } catch (error) {
     console.error('Failed to fetch trading header data:', error)
     return (
-      <Card className="bg-trading-surface border-border/50">
+      <Card className="bg-card border-border/50">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">

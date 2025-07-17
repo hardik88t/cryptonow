@@ -64,7 +64,7 @@ export function TradeHistory() {
   }, [])
 
   return (
-    <Card className="bg-trading-surface border-border/50 h-[200px]">
+    <Card className="bg-card border-border/50 h-[200px]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <History className="h-4 w-4" />

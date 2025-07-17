@@ -7,13 +7,13 @@ import { TradingForm } from "@/components/trading/trading-form"
 
 export default function TradingPage() {
   return (
-    <div className="min-h-screen bg-trading-background">
+    <div className="bg-background pb-20">
       <div className="container mx-auto p-4 space-y-4">
         <Suspense fallback={<div>Loading trading data...</div>}>
           <TradingHeader />
         </Suspense>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-200px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-[calc(100vh-300px)]">
           {/* Main Chart Area */}
           <div className="lg:col-span-3 space-y-4">
             <Suspense fallback={<div>Loading chart...</div>}>
